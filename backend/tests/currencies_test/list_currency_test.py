@@ -45,5 +45,5 @@ class TestListSubCategoryView:
 
         response = client.get(f'{self.url}?date={date}')
 
-        assert response.data[0].get('date') == date
-        assert len(response.data) == 1
+        assert response.data[0].get('date') == date.strftime('%Y-%m-%d')
+        assert len(response.data) == 5

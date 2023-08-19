@@ -23,7 +23,7 @@ class Command(BaseCommand):
                         defaults={'name': currency_data['Name']}
                     )
 
-                    date = datetime.strptime(data['Date'], '%Y-%m-%dT%H:%M:%S%z').date()
+                    date = datetime.now().date()
 
                     rate, created = CurrencyRate.objects.get_or_create(
                         currency=currency,
@@ -32,8 +32,9 @@ class Command(BaseCommand):
                     )
 
                     if created:
-                        self.stdout.write(self.style.SUCCESS(f'Успешно добавлено {currency} - {date}.'))
+                        self.stdout.write(
+                            self.style.SUCCESS(f'Успешно добавлено {currency} на {date}.'))
                     else:
-                        self.stdout.write(self.style.WARNING(f'{currency} - {date} уже добавлено.'))
+                        self.stdout.write(self.style.WARNING(f'{currency} на {date} уже добавлено.'))
         except Exception as ex:
             self.stdout.write(self.style.ERROR(f'Ошибка при выполнении команды: {str(ex)}.'))

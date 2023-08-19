@@ -16,7 +16,7 @@ class Currency(models.Model):
 
 class CurrencyRate(models.Model):
     currency = models.ForeignKey(Currency, verbose_name='Валюта', on_delete=models.CASCADE)
-    date = models.DateField(verbose_name='Дата сбора данных')
+    date = models.DateField(verbose_name='Дата сбора данных', auto_now_add=True)
     value = models.DecimalField(verbose_name='Курс', max_digits=10, decimal_places=4)
 
     class Meta:
