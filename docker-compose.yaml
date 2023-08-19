@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+    server:
+      build: ./backend
+      container_name: currency_exchange_tracker_server
+      env_file:
+        - ./backend/.env
+      environment:
+        - POSTGRES_HOST=db
+      ports:
+        - '8000:8000'
+
+    migrations:
+      build: ./backend
+      container_name: currency_exchange_tracker_migrations
+      env_file:
+        - ./backend/.env
+      environment:
+        - POSTGRES_HOST=db
+      depends_on:
+        db:
+          condition: service_healthy
+      command: python manage.py migrate
+
+    db:
+      image: postgres:15.2
+      container_name: currency_exchange_tracker_db
+      ports:
+        - "5432:5432"
+      env_file:
+        - ./backend/.env
+      restart: always
+      volumes:
+        - pg_data:/var/lib/postgresql/data/
+      healthcheck:
+        test: pg_isready -U admin -d currency_exchange_tracker
+        interval: 3s
+        retries: 10
+        timeout: 3s
+
+volumes:
+  pg_data:
